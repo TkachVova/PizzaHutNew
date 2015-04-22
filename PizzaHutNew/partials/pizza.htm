@@ -1,0 +1,42 @@
+﻿<!--Details of pizza--> 
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span8">
+
+            <!-- pizza info -->
+            <div class="well">
+                <div class="span2">
+                    <b>{{pizza.name}}</b>
+                </div>
+            </div>
+            <div class="span8">
+                <img ng-src="img/pizzas/{{pizza.id}}.png" alt="{{pizza.name}}" />
+            </div>
+            <div class="span4">
+                <b>{{pizza.ingridients}}</b>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+
+        <!-- buttons -->
+        <div class="span4">
+            <button 
+                class="btn btn-block btn-success" 
+                ng-click="cart.addItem(pizza.id, pizza.name, pizza.price, 1)">
+                <i class="icon-shopping-cart icon-white" /> add to cart
+            </button>
+            <button 
+                class="btn btn-block btn-danger" 
+                ng-click="cart.addItem(pizza.id, pizza.name, pizza.price, -10000)"
+                ng-disabled="cart.getTotalCount(pizza.id) < 1">
+                <i class="icon-trash icon-white" /> remove from cart
+            </button>
+            <button 
+                class="btn btn-block" 
+                onclick="window.location.href=''">
+                <i class="icon-chevron-left" /> back to store
+            </button>
+        </div>
+    </div>
+</div>
+

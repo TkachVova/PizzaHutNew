@@ -1,0 +1,78 @@
+﻿<!--Order page. We post order here--> 
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span6">
+
+            <!-- items -->
+            <table class="table table-bordered">
+
+                <!-- header -->
+                <tr class="well">
+                    <td><b>Item</b></td>
+                    <td class="tdCenter"><b>Quantity</b></td>
+                    <td class="tdRight"><b>Price</b></td> 
+                </tr>
+                <!-- cart items -->
+                <tr ng-repeat="item in order.items | orderBy:'name'">
+                    <td>{{item.name}}</td>
+                    <td class="tdCenter">
+                        {{item.quantity}}
+                    </td>
+                    <td class="tdRight">{{item.price * item.quantity | currency}}</td>
+                </tr>
+
+                <!-- footer -->
+                <tr class="well">
+                    <td><b>Total</b></td>
+                    <td class="tdCenter"><b>{{cart.getTotalCount()}}</b></td>
+                    <td class="tdRight"><b>{{cart.getTotalPrice() | currency}}</b></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="span3" ng-hide="orderForm.$valid">
+            <span class="label label-warning">Please, enter info to form!</span>
+            <br />
+            <span class="label label-warning">Phone as ten digits(0447773322)</span>
+        </div>
+        
+        
+        <div class="span3" ng-show="orderForm.$valid">
+            <span class="label label-success">Thank you for entering valid data!</span>
+        </div>
+
+        <!--<input class="span3 text-center" type="number"
+               ng-model="item.quantity"
+               ng-change="cart.saveItems()"
+               min="1" max="99" required />
+-->
+        <div class="span3">
+            <form name="orderForm" ng-submit="order.submit(); order.Post(); cart.clearItems()">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1"></span>
+                    <input type="text" class="form-control" placeholder="Enter your name" aria-describedby="basic-addon1" ng-model="order.client.name" required>
+                    <input type="text" class="form-control" placeholder="Enter delivery address" aria-describedby="basic-addon1" ng-model="order.deliveryAddress" required>
+                    <input type="number" ng-model="order.client.phone" ng-minlength="10" ng-maxlength="10" class="form-control"
+                           placeholder="Your phone number as 10 digits" aria-describedby="basic-addon1" name="phone" required>
+                    <button type="submit" class="btn btn-block btn-primary"
+                            ng-disabled="!orderForm.$valid"
+                            ng-click="go('/thanks')">
+                        <i class="icon-ok icon-white" /> Place order
+                    </button>
+        </div>
+            </form>
+            <button class="btn btn-block"
+                    onclick="window.location.href='default.htm'">
+                <i class="icon-chevron-left" /> back to store
+            </button>
+            <button class="btn btn-block"
+                    ng-click="go('/cart')">
+                <i class="icon-chevron-left" /> back to cart
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+

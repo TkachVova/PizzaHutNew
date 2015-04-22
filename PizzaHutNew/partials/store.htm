@@ -1,0 +1,39 @@
+﻿<!--Here we output pizzas (PizzaList) Main Page--> 
+
+
+
+<div class="span4" style="margin-right:0px; margin:0" ng-repeat="pizza in store.pizzas|slice:store.currentPage*store.pageSize:store.currentPage*store.pageSize+store.pageSize">
+    <a href="#/pizza/{{pizza.id}}"><b>{{pizza.name}}</b></a><br />
+    <a href="#/pizza/{{pizza.id}}">
+        <img ng-src="img/pizzas/{{pizza.id}}.png" alt="{{pizza.name}}" />
+    </a>
+        <span>{{pizza.ingridients|cut:true:40:' ...'}}</span><br/>
+        <span>{{pizza.price | currency}}</span><br/>
+        <span>
+            <a href="" ng-click="cart.addItem(pizza.id, pizza.name, pizza.price, 1)">
+                add {{pizza.name}} to cart
+            </a>
+        </span>
+        <br /><br />
+</div>
+
+
+<div class="span10" style="margin:0">
+    <button class="btn btn-info" ng-disabled="store.currentPage == 0" ng-click="store.currentPage=store.currentPage-1; store.goOnTop()">
+        <i class="icon-chevron-left" />Previous page
+    </button>
+    {{store.currentPage+1}}/{{store.numberOfPages()}}
+    <button class="btn btn-info" ng-disabled="store.currentPage >= store.pizzas.length/store.pageSize - 1" ng-click="store.currentPage=store.currentPage+1; store.goOnTop()">
+        Next page<i class="icon-chevron-right" />
+    </button>
+</div>
+
+<div style="clear:both"></div>
+
+<br/>
+
+
+
+
+    
+
