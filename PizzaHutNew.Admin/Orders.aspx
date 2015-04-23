@@ -21,7 +21,7 @@
                         <asp:Label runat="server" Text='<%# Bind("fullprice") %>' ID="Label1"></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="deliveryAddress" SortExpression="deliveryAddress">
+                <asp:TemplateField HeaderText="Delivery address" SortExpression="deliveryAddress">
                     <EditItemTemplate>
                         <asp:TextBox runat="server" Text='<%# Bind("deliveryAddress") %>' ID="TextBox2"></asp:TextBox>
                     </EditItemTemplate>
@@ -29,7 +29,7 @@
                         <asp:Label runat="server" Text='<%# Bind("deliveryAddress") %>' ID="Label2"></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:TemplateField HeaderText="orderTime" SortExpression="orderTime">
+                <asp:TemplateField HeaderText="Order time" SortExpression="orderTime">
                     <EditItemTemplate>
                         <asp:TextBox runat="server" Text='<%# Bind("orderTime") %>' ID="TextBox3"></asp:TextBox>
                     </EditItemTemplate>
@@ -77,41 +77,51 @@
 
         <!-- Entity data source for getting selected order for detail view -->
         <asp:EntityDataSource ID="OrderDetails" runat="server" ConnectionString="name=PizzaHutDbEntities" DefaultContainerName="PizzaHutDbEntities" EnableFlattening="False"
-            EntitySetName="orders" Select="it.[id], it.[fullprice], it.[deliveryAddress]" Where="it.[id]=@id">
+            EntitySetName="orders" Where="it.[id]=@id" EnableUpdate="True">
             <WhereParameters>
                 <asp:ControlParameter ControlID="OrdersGridView1"
                     Name="id" PropertyName="SelectedValue"
                     Type="Int32" />
             </WhereParameters>
         </asp:EntityDataSource>
+
+
         <h2>Orders details (to see press select in Orders grit) </h2>
-    <asp:DetailsView ID="DetailsView1" runat="server" Height="50px" Width="310px" DataSourceID="OrderDetails" AutoGenerateRows="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal">
-        <EditRowStyle BackColor="#CC3333" Font-Bold="True" ForeColor="White"></EditRowStyle>
-        <Fields>
-            <asp:BoundField DataField="id" HeaderText="Order id" ReadOnly="True" SortExpression="id"></asp:BoundField>
-            <asp:BoundField DataField="fullprice" HeaderText="Order price" ReadOnly="True" SortExpression="fullprice"></asp:BoundField>
-            <asp:BoundField DataField="deliveryAddress" HeaderText="Delivery address" ReadOnly="True" SortExpression="deliveryAddress"></asp:BoundField>
-        </Fields>
-        <FooterStyle BackColor="#CCCC99" ForeColor="Black"></FooterStyle>
+        <asp:DetailsView ID="OrderDetailsView2" runat="server" Height="50px" Width="315px" DataSourceID="OrderDetails" AutoGenerateRows="False" DataKeyNames="id" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal">
+            <EditRowStyle BackColor="#CC3333" Font-Bold="True" ForeColor="White"></EditRowStyle>
+            <Fields>
+                <asp:BoundField DataField="fullprice" HeaderText="fullprice" SortExpression="fullprice"></asp:BoundField>
+                <asp:BoundField DataField="deliveryAddress" HeaderText="deliveryAddress" SortExpression="deliveryAddress"></asp:BoundField>
+                <asp:BoundField DataField="orderTime" HeaderText="orderTime" SortExpression="orderTime"></asp:BoundField>
+                <asp:CommandField ShowEditButton="True"></asp:CommandField>
+            </Fields>
+            <FooterStyle BackColor="#CCCC99" ForeColor="Black"></FooterStyle>
 
-        <HeaderStyle BackColor="#333333" Font-Bold="True" ForeColor="White"></HeaderStyle>
+            <HeaderStyle BackColor="#333333" Font-Bold="True" ForeColor="White"></HeaderStyle>
 
-        <PagerStyle HorizontalAlign="Right" BackColor="White" ForeColor="Black"></PagerStyle>
-    </asp:DetailsView>
+            <PagerStyle HorizontalAlign="Right" BackColor="White" ForeColor="Black"></PagerStyle>
+        </asp:DetailsView>
+
+
         <!-- Getting details of selected customer -->
-    <asp:EntityDataSource ID="CustomerDataSource1" runat="server" ConnectionString="name=PizzaHutDbEntities" DefaultContainerName="PizzaHutDbEntities" 
-        EnableFlattening="False"  CommandText="SELECT c.id, c.name, c.phone FROM customers as c WHERE c.id = @customerId">
-        <CommandParameters>
-            <asp:ControlParameter ControlID="OrdersGridView1"
-                Name="customerId" PropertyName="SelectedDataKey.Values[1]"
-          Type="Int32"/>
-        </CommandParameters>
+    <asp:EntityDataSource ID="CustomerDataSource1" runat="server" ConnectionString="name=PizzaHutDbEntities" DefaultContainerName="PizzaHutDbEntities"
+            EnableFlattening="False" EntitySetName="customers" Where="it.[id]=@id" EnableUpdate="True">
+            <WhereParameters>
+                <asp:ControlParameter ControlID="OrdersGridView1"
+                    Name="id" PropertyName="SelectedDataKey.Values[1]"
+                    Type="Int32" />
+            </WhereParameters>
+       
     </asp:EntityDataSource>
-    <asp:DetailsView ID="CustomerDetailsView2" runat="server" Height="50px" Width="310px" DataSourceID="CustomerDataSource1" AutoGenerateRows="False" DataKeyNames="id" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal">
+
+
+
+    <asp:DetailsView ID="CustomerDetailsView1" runat="server" Height="50px" Width="315px" DataSourceID="CustomerDataSource1" AutoGenerateRows="False" DataKeyNames="id" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="4" ForeColor="Black" GridLines="Horizontal">
         <EditRowStyle BackColor="#CC3333" Font-Bold="True" ForeColor="White"></EditRowStyle>
         <Fields>
             <asp:BoundField DataField="name" HeaderText="Customer's name" SortExpression="name"></asp:BoundField>
             <asp:BoundField DataField="phone" HeaderText="Customer's phone" SortExpression="phone"></asp:BoundField>
+            <asp:CommandField ShowEditButton="True"></asp:CommandField>
         </Fields>
         <FooterStyle BackColor="#CCCC99" ForeColor="Black"></FooterStyle>
 
@@ -119,6 +129,8 @@
 
         <PagerStyle HorizontalAlign="Right" BackColor="White" ForeColor="Black"></PagerStyle>
     </asp:DetailsView>
+
+     
         <!-- Getting table of pizzas in order and their quantities -->
     <asp:EntityDataSource ID="PizzasInCartDataSource1" runat="server" ConnectionString="name=PizzaHutDbEntities" DefaultContainerName="PizzaHutDbEntities" EnableFlattening="False"
         CommandText="SELECT DISTINCT p.name, p.price, ci.quantity 

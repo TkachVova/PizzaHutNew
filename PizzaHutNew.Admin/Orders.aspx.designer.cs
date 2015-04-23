@@ -40,13 +40,13 @@ namespace PizzaHutNew.Admin {
         protected global::System.Web.UI.WebControls.EntityDataSource OrderDetails;
         
         /// <summary>
-        /// DetailsView1 control.
+        /// OrderDetailsView2 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DetailsView DetailsView1;
+        protected global::System.Web.UI.WebControls.DetailsView OrderDetailsView2;
         
         /// <summary>
         /// CustomerDataSource1 control.
@@ -58,13 +58,13 @@ namespace PizzaHutNew.Admin {
         protected global::System.Web.UI.WebControls.EntityDataSource CustomerDataSource1;
         
         /// <summary>
-        /// CustomerDetailsView2 control.
+        /// CustomerDetailsView1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DetailsView CustomerDetailsView2;
+        protected global::System.Web.UI.WebControls.DetailsView CustomerDetailsView1;
         
         /// <summary>
         /// PizzasInCartDataSource1 control.

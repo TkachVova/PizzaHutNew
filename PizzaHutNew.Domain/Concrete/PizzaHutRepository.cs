@@ -31,59 +31,38 @@ namespace PizzaHutNew.Domain.Concrete
             }
         }
 
-        //public IQueryable<customer> Customers
-        //{
-        //    get { return context.customers; }
-        //}
 
-        //public IQueryable<order> Orders
-        //{
-        //    get { return context.orders; }
-        //}
-        ////add new to pizzas
-        //public void CreatePizza(pizza _pizza)
-        //{
-        //    context.pizzas.Add(_pizza);
-        //    context.SaveChanges();
-        //}
-        ////find pizza in pizzas
-        //public pizza getPizzaById(int pid)
-        //{
-        //    return context.pizzas.Where(p => p.id == pid).SingleOrDefault();
-        //}
-        ////edit cur pizza
-        //public void EditPizza(pizza _pizza)
-        //{
-        //    pizza pOld = context.pizzas.Where(x => x.id == _pizza.id).SingleOrDefault();
-        //    if (pOld != null)
-        //    {
-        //        context.Entry(pOld).CurrentValues.SetValues(_pizza);
-        //        context.SaveChanges();
-        //    }
-        //}
-
-        private void CreateCustomer(string name, string phone)
+        private int CreateCustomer(string name, string phone)
         {
-            customer cust = new customer();
-            cust.name = name;
             if (phone.Length < 10)
             {
                 int i = 10 - phone.Length;
-                for (int t = 0;  t < i;  t++)
+                for (int t = 0; t < i; t++)
                 {
                     phone = "0" + phone;
                 }
             }
-            cust.phone = phone;
-            cust.id = 1;
-            context.customers.Add(cust);
-            context.SaveChanges();
+            customer foundedCustomer = context.customers.SingleOrDefault(p => p.phone == phone);
+            if (foundedCustomer != null)
+            {
+                return foundedCustomer.id;
+            }
+            else
+            {
+                customer cust = new customer();
+                cust.name = name;
+                cust.phone = phone;
+                cust.id = 1;
+                context.customers.Add(cust);
+                context.SaveChanges();
+                return context.customers.Max(p => p.id);
+            }
         }
 
-        private void CreateOrder(javaOrder _order)
+        private void CreateOrder(javaOrder _order, int id)
         {
             order ord = new order();
-            ord.customerId = context.customers.Max(p => p.id);
+            ord.customerId = id;
             ord.deliveryAddress = _order.deliveryAddress;
             ord.fullprice = _order.items.Sum(p => p.price * p.quantity);
             ord.processing = false;
@@ -105,8 +84,8 @@ namespace PizzaHutNew.Domain.Concrete
         //takes received(from the fronend) order, and put it in all entities of relational db PizzaHutDb
         public void TakeOrder(javaOrder _order)
         {
-            CreateCustomer(_order.client.name, _order.client.phone);
-            CreateOrder(_order);
+            int customerId = CreateCustomer(_order.client.name, _order.client.phone);
+            CreateOrder(_order, customerId);
             int orderId = context.orders.Max(p => p.id);
             foreach (var oitem in _order.items)
             {
